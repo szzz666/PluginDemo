@@ -1,0 +1,6 @@
+name: PluginDemo
+main: top.szzz666.PluginDemo.PluginDemoMain
+version: "1.0.0"
+author: szzz666
+api: ["1.0.0"]
+description: PluginDemo plugin
