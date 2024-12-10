@@ -8,8 +8,6 @@ import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowSimple;
 import top.szzz666.PluginDemo.config.MyConfig;
 
-import static top.szzz666.PluginDemo.config.LangConfig.loadLangConfig;
-import static top.szzz666.PluginDemo.config.LangConfig.saveConfig;
 import static top.szzz666.PluginDemo.config.MyConfig.Language;
 import static top.szzz666.PluginDemo.config.MyConfig.loadConfig;
 
@@ -26,7 +24,6 @@ public class LmForm {
                 Form0(player);
             } else {
                 loadConfig();
-                loadLangConfig();
                 player.sendMessage("mainForm_sendMessage");
             }
         }));
@@ -41,11 +38,8 @@ public class LmForm {
         form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (form.wasClosed()) return;
             String Language = form.getResponse().getInputResponse(0);
-
             // 处理用户提交的数据
             MyConfig.Language = Language;
-            saveConfig();
-            loadLangConfig();
             player.sendMessage("Form0_sendMessage");
         }));
         // 显示表单给玩家
