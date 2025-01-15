@@ -28,7 +28,6 @@ public class Main extends PluginBase {
         ConfigPath = getDataFolder().getPath();
         ec = new EasyConfig("config.yml", plugin);
         nkConsole("&b" + plugin.getName() + "插件读取...");
-
     }
 
     //插件开启
