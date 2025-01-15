@@ -1,11 +1,11 @@
-package top.szzz666.PluginDemo.form;
+package top.szzz666.nukkit_plugin.form;
 
 import cn.nukkit.Player;
 import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.handler.FormResponseHandler;
 import cn.nukkit.form.window.FormWindowSimple;
 
-import static top.szzz666.PluginDemo.config.MyConfig.loadConfig;
+import static top.szzz666.nukkit_plugin.Main.ec;
 
 
 public class MyForm {
@@ -19,7 +19,7 @@ public class MyForm {
             if (buttonIndex == 0) {
                 player.sendMessage("mainForm_sendMessage");
             } else {
-                loadConfig();
+                ec.load();
                 player.sendMessage("mainForm_sendMessage");
             }
         }));

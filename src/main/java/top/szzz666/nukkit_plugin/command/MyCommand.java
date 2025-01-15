@@ -1,4 +1,4 @@
-package top.szzz666.PluginDemo.command;
+package top.szzz666.nukkit_plugin.command;
 
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;

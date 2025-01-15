@@ -1,5 +1,5 @@
 name: PluginDemo
-main: top.szzz666.PluginDemo.PluginDemoMain
+main: top.szzz666.nukkit_plugin.Main
 version: "1.0.0"
 author: szzz666
 api: ["1.0.0"]
