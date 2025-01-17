@@ -12,6 +12,7 @@ import java.util.List;
 
 import static top.szzz666.nukkit_plugin.tools.taskUtil.Async;
 
+
 @Data
 public class Custom {
     private final List<String> elements = new ArrayList<>();

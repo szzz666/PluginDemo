@@ -12,6 +12,7 @@ import java.util.List;
 
 import static top.szzz666.nukkit_plugin.tools.taskUtil.Async;
 
+
 @Data
 public class Simple {
     private final FormWindowSimple form;
@@ -22,6 +23,10 @@ public class Simple {
         this.form = new FormWindowSimple(title, content);
     }
 
+    public void add(String text) {
+        this.buttons.add(() -> {});
+        this.form.addButton(new ElementButton(text));
+    }
     public void add(String text, Runnable runnable) {
         this.buttons.add(runnable);
         this.form.addButton(new ElementButton(text));
@@ -31,6 +36,9 @@ public class Simple {
         String type = img.startsWith("http") ? "url" : "path";
         this.buttons.add(runnable);
         this.form.addButton(new ElementButton(text, new ElementButtonImageData(type, img)));
+    }
+    public int getClickedId(){
+        return this.form.getResponse().getClickedButtonId();
     }
 
     public void show(Player player) {
