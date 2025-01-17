@@ -8,15 +8,14 @@ import cn.nukkit.form.window.FormWindowSimple;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 import static top.szzz666.nukkit_plugin.tools.taskUtil.Async;
 
 @Data
 public class Simple {
     private final FormWindowSimple form;
-    private final Map<ElementButton, Runnable> buttons = new LinkedHashMap<>();
+    private final List<Runnable> buttons = new ArrayList<>();
     private Runnable close;
 
     public Simple(String title, String content) {
@@ -24,18 +23,17 @@ public class Simple {
     }
 
     public void add(String text, Runnable runnable) {
-        this.buttons.put(new ElementButton(text), runnable);
+        this.buttons.add(runnable);
+        this.form.addButton(new ElementButton(text));
     }
 
     public void add(String text, String img, Runnable runnable) {
         String type = img.startsWith("http") ? "url" : "path";
-        this.buttons.put(new ElementButton(text, new ElementButtonImageData(type, img)), runnable);
+        this.buttons.add(runnable);
+        this.form.addButton(new ElementButton(text, new ElementButtonImageData(type, img)));
     }
 
     public void show(Player player) {
-        for (ElementButton button : this.buttons.keySet()) {
-            this.form.addButton(button);
-        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (this.form.wasClosed()) {
                 if (this.close != null) {
@@ -43,15 +41,12 @@ public class Simple {
                 }
                 return;
             }
-            new ArrayList<>(this.buttons.values()).get(form.getResponse().getClickedButtonId()).run();
+            this.buttons.get(form.getResponse().getClickedButtonId()).run();
         }));
         player.showFormWindow(this.form);
     }
 
     public void asyncShow(Player player) {
-        for (ElementButton button : this.buttons.keySet()) {
-            this.form.addButton(button);
-        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(() -> {
             if (this.form.wasClosed()) {
                 if (this.close != null) {
@@ -59,7 +54,7 @@ public class Simple {
                 }
                 return;
             }
-            new ArrayList<>(this.buttons.values()).get(form.getResponse().getClickedButtonId()).run();
+            this.buttons.get(form.getResponse().getClickedButtonId()).run();
         })));
         player.showFormWindow(this.form);
     }

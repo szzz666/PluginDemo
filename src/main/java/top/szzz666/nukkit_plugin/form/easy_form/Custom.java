@@ -8,14 +8,13 @@ import cn.nukkit.form.window.FormWindowCustom;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 import static top.szzz666.nukkit_plugin.tools.taskUtil.Async;
 
 @Data
 public class Custom {
-    private final Map<String, Element> elements = new LinkedHashMap<>();
+    private final List<String> elements = new ArrayList<>();
     private FormWindowCustom form;
     private Runnable close;
     private Runnable submit;
@@ -26,7 +25,8 @@ public class Custom {
 
     public String add(String Label) {
         String key = getRandKey();
-        this.elements.put(key, new ElementLabel(Label));
+        this.elements.add(key);
+        this.form.addElement(new ElementLabel(Label));
         return key;
     }
 
@@ -35,13 +35,11 @@ public class Custom {
     }
 
     public void add(String key, Element element) {
-        this.elements.put(key, element);
+        this.elements.add(key);
+        this.form.addElement(element);
     }
 
     public void show(Player player) {
-        for (Element element : this.elements.values()) {
-            this.form.addElement(element);
-        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
             if (this.form.wasClosed()) {
                 if (this.close != null) {
@@ -57,9 +55,6 @@ public class Custom {
     }
 
     public void asyncShow(Player player) {
-        for (Element element : this.elements.values()) {
-            this.form.addElement(element);
-        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(() -> {
             if (this.form.wasClosed()) {
                 if (this.close != null) {
@@ -76,43 +71,35 @@ public class Custom {
 
     @SuppressWarnings("unchecked")
     public <T> T getRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return (T) this.form.getResponse().getResponse(index);
+        return (T) this.form.getResponse().getResponse(elements.indexOf(key));
     }
 
     public String getInputRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getInputResponse(index);
+        return this.form.getResponse().getInputResponse(elements.indexOf(key));
     }
 
     public String getDropdownRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getDropdownResponse(index).getElementContent();
+        return this.form.getResponse().getDropdownResponse(elements.indexOf(key)).getElementContent();
     }
 
     public String getStepSliderRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getStepSliderResponse(index).getElementContent();
+        return this.form.getResponse().getStepSliderResponse(elements.indexOf(key)).getElementContent();
     }
 
     public int getStepSliderIdRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getStepSliderResponse(index).getElementID();
+        return this.form.getResponse().getStepSliderResponse(elements.indexOf(key)).getElementID();
     }
 
     public int getDropdownIndexRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getDropdownResponse(index).getElementID();
+        return this.form.getResponse().getDropdownResponse(elements.indexOf(key)).getElementID();
     }
 
     public float getSliderRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getSliderResponse(index);
+        return this.form.getResponse().getSliderResponse(elements.indexOf(key));
     }
 
     public boolean getToggleRes(String key) {
-        int index = new ArrayList<>(this.elements.keySet()).indexOf(key);
-        return this.form.getResponse().getToggleResponse(index);
+        return this.form.getResponse().getToggleResponse(elements.indexOf(key));
     }
 
 }
