@@ -8,6 +8,7 @@ import top.szzz666.nukkit_plugin.command.MyCommand;
 import top.szzz666.nukkit_plugin.config.EasyConfig;
 import top.szzz666.nukkit_plugin.event.Listeners;
 
+import static top.szzz666.nukkit_plugin.config.MyConfig.initConfig;
 import static top.szzz666.nukkit_plugin.tools.pluginUtil.nkConsole;
 import static top.szzz666.nukkit_plugin.tools.pluginUtil.pluginNameLineConsole;
 
@@ -27,6 +28,7 @@ public class Main extends PluginBase {
         consoleObjects = getServer().getConsoleSender();
         ConfigPath = getDataFolder().getPath();
         ec = new EasyConfig("config.yml", plugin);
+        initConfig();
         nkConsole("&b" + plugin.getName() + "插件读取...");
     }
 

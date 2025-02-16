@@ -42,28 +42,22 @@ public class Simple {
     }
 
     public void show(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
-            if (this.form.wasClosed()) {
-                if (this.close != null) {
-                    this.close.run();
-                }
-                return;
-            }
-            this.buttons.get(form.getResponse().getClickedButtonId()).run();
-        }));
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }
 
-    public void asyncShow(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(() -> {
-            if (this.form.wasClosed()) {
-                if (this.close != null) {
-                    this.close.run();
-                }
-                return;
+    private void processReturns() {
+        if (this.form.wasClosed()) {
+            if (this.close != null) {
+                this.close.run();
             }
-            this.buttons.get(form.getResponse().getClickedButtonId()).run();
-        })));
+            return;
+        }
+        this.buttons.get(form.getResponse().getClickedButtonId()).run();
+    }
+
+    public void asyncShow(Player player) {
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(this::processReturns)));
         player.showFormWindow(this.form);
     }
 }

@@ -41,32 +41,24 @@ public class Custom {
     }
 
     public void show(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
-            if (this.form.wasClosed()) {
-                if (this.close != null) {
-                    this.close.run();
-                }
-                return;
-            }
-            if (this.submit != null) {
-                this.submit.run();
-            }
-        }));
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }
 
+    private void processReturns() {
+        if (this.form.wasClosed()) {
+            if (this.close != null) {
+                this.close.run();
+            }
+            return;
+        }
+        if (this.submit != null) {
+            this.submit.run();
+        }
+    }
+
     public void asyncShow(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(() -> {
-            if (this.form.wasClosed()) {
-                if (this.close != null) {
-                    this.close.run();
-                }
-                return;
-            }
-            if (this.submit != null) {
-                this.submit.run();
-            }
-        })));
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(this::processReturns)));
         player.showFormWindow(this.form);
     }
 

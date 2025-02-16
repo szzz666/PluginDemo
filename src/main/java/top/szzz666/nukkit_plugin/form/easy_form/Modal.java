@@ -15,6 +15,7 @@ public class Modal {
 
     private Runnable truer;
     private Runnable falser;
+    private Runnable close;
 
 
     public Modal(String title, String content, String trueButtonText, String falseButtonText) {
@@ -26,41 +27,45 @@ public class Modal {
         modal.setTruer(() -> player.showFormWindow(form));
         modal.asyncShow(player);
     }
+
     public static void confirmModal(Player player, String content, FormWindow form, Runnable truer) {
         Modal form1 = new Modal("需要确认", content, "确认", "返回");
         form1.setTruer(truer);
         form1.setFalser(() -> player.showFormWindow(form));
         form1.asyncShow(player);
     }
+    public static void confirmModal(Player player, String content, Runnable truer) {
+        Modal form1 = new Modal("需要确认", content, "确认", "取消");
+        form1.setTruer(truer);
+        form1.asyncShow(player);
+    }
     public void show(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> {
-            if (form.getResponse().getClickedButtonId() == 0) {
-                if (this.truer != null) {
-                    this.truer.run();
-                }
-            } else {
-                if (this.falser != null) {
-                    this.falser.run();
-                }
-            }
-        }));
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }
 
 
 
     public void asyncShow(Player player) {
-        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(() -> {
-            if (form.getResponse().getClickedButtonId() == 0) {
-                if (this.truer != null) {
-                    this.truer.run();
-                }
-            } else {
-                if (this.falser != null) {
-                    this.falser.run();
-                }
-            }
-        })));
+        this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> Async(this::processReturns)));
         player.showFormWindow(this.form);
+    }
+
+    private void processReturns() {
+        if (this.form.wasClosed()) {
+            if (this.close != null) {
+                this.close.run();
+            }
+            return;
+        }
+        if (this.form.getResponse().getClickedButtonId() == 0) {
+            if (this.truer != null) {
+                this.truer.run();
+            }
+        } else {
+            if (this.falser != null) {
+                this.falser.run();
+            }
+        }
     }
 }
