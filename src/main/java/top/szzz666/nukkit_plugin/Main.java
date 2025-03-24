@@ -7,10 +7,10 @@ import cn.nukkit.plugin.PluginBase;
 import top.szzz666.nukkit_plugin.command.MyCommand;
 import top.szzz666.nukkit_plugin.config.EasyConfig;
 import top.szzz666.nukkit_plugin.event.Listeners;
+import top.szzz666.nukkit_plugin.panel.esay_chest_menu.CMListener;
 
 import static top.szzz666.nukkit_plugin.config.MyConfig.initConfig;
 import static top.szzz666.nukkit_plugin.tools.pluginUtil.nkConsole;
-import static top.szzz666.nukkit_plugin.tools.pluginUtil.pluginNameLineConsole;
 
 
 public class Main extends PluginBase {
@@ -36,10 +36,11 @@ public class Main extends PluginBase {
     @Override
     public void onEnable() {
         //注册监听器
-        this.getServer().getPluginManager().registerEvents(new Listeners(), this);
+        nkServer.getPluginManager().registerEvents(new Listeners(), this);
+        nkServer.getPluginManager().registerEvents(new CMListener(), this);
         //注册命令
-        this.getServer().getCommandMap().register(this.getName(), new MyCommand());
-        pluginNameLineConsole();
+        nkServer.getCommandMap().register(this.getName(), new MyCommand());
+//        pluginNameLineConsole();
         nkConsole("&b" + plugin.getName() + "插件开启");
         nkConsole("&c" + plugin.getName() + "如果遇到任何bug，请加入Q群进行反馈：894279534", 1);
     }
