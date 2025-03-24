@@ -4,10 +4,34 @@ import cn.nukkit.utils.TextFormat;
 import io.leego.banana.BananaUtils;
 import io.leego.banana.Font;
 import lombok.SneakyThrows;
+import top.szzz666.nukkit_plugin.panel.esay_chest_menu.lib.AbstractFakeInventory;
 
 import static top.szzz666.nukkit_plugin.Main.plugin;
 
 public class pluginUtil {
+    public static void checkServer(){
+        boolean ver = false;
+        //双核心兼容
+        try {
+            Class<?> c = Class.forName("cn.nukkit.Nukkit");
+            c.getField("NUKKIT_PM1E");
+            ver = true;
+
+        } catch (ClassNotFoundException | NoSuchFieldException ignore) { }
+        try {
+            Class<?> c = Class.forName("cn.nukkit.Nukkit");
+            "Nukkit PetteriM1 Edition".equalsIgnoreCase(c.getField("NUKKIT").get(c).toString());
+            ver = true;
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignore) {
+        }
+
+        AbstractFakeInventory.IS_PM1E = ver;
+        if(ver){
+            nkConsole("当前插件运行在: Nukkit PM1E 核心上");
+        }else{
+            nkConsole("当前插件运行在: Nukkit 核心上");
+        }
+    }
     //Banana
     @SneakyThrows
     public static void pluginNameLineConsole() {

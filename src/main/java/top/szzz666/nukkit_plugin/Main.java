@@ -10,6 +10,7 @@ import top.szzz666.nukkit_plugin.event.Listeners;
 import top.szzz666.nukkit_plugin.panel.esay_chest_menu.CMListener;
 
 import static top.szzz666.nukkit_plugin.config.MyConfig.initConfig;
+import static top.szzz666.nukkit_plugin.tools.pluginUtil.checkServer;
 import static top.szzz666.nukkit_plugin.tools.pluginUtil.nkConsole;
 
 
@@ -35,6 +36,8 @@ public class Main extends PluginBase {
     //插件开启
     @Override
     public void onEnable() {
+        //检查服务器
+        checkServer();
         //注册监听器
         nkServer.getPluginManager().registerEvents(new Listeners(), this);
         nkServer.getPluginManager().registerEvents(new CMListener(), this);
