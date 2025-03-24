@@ -27,6 +27,19 @@ public class ChestMenu extends ChestFakeInventory {
         this.setName(title);
     }
 
+    public ChestMenu(String title, boolean autoClose) {
+        super(InventoryType.CHEST, null, title);
+        this.setName(title);
+        super.setAutoClose(autoClose);
+    }
+
+    public ChestMenu(String title, boolean autoClose, boolean async) {
+        super(InventoryType.CHEST, null, title);
+        this.setName(title);
+        super.setAutoClose(autoClose);
+        super.setAsync(async);
+    }
+
     public void add(int slot, Item item, Runnable runnable) {
         this.buttons.add(new Button(slot, item, runnable));
     }
@@ -41,6 +54,7 @@ public class ChestMenu extends ChestFakeInventory {
         }
         this.setContents(itemMap);
         this.setRs(rs);
+        this.setPlayer(player);
         player.addWindow(this);
     }
 

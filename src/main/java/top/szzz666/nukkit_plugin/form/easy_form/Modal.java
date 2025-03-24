@@ -16,10 +16,16 @@ public class Modal {
     private Runnable truer;
     private Runnable falser;
     private Runnable close;
+    private boolean async;
 
 
     public Modal(String title, String content, String trueButtonText, String falseButtonText) {
         this.form = new FormWindowModal(title, content, trueButtonText, falseButtonText);
+    }
+
+    public Modal(String title, String content, String trueButtonText, String falseButtonText, boolean async) {
+        this.form = new FormWindowModal(title, content, trueButtonText, falseButtonText);
+        this.async = async;
     }
 
     public static void tipsModal(Player player, String content, FormWindow form) {
@@ -34,16 +40,21 @@ public class Modal {
         form1.setFalser(() -> player.showFormWindow(form));
         form1.asyncShow(player);
     }
+
     public static void confirmModal(Player player, String content, Runnable truer) {
         Modal form1 = new Modal("需要确认", content, "确认", "取消");
         form1.setTruer(truer);
         form1.asyncShow(player);
     }
+
     public void show(Player player) {
+        if (this.async){
+            asyncShow(player);
+            return;
+        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }
-
 
 
     public void asyncShow(Player player) {

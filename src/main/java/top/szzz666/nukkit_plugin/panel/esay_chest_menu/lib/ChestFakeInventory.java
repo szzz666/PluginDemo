@@ -31,6 +31,15 @@ public class ChestFakeInventory extends AbstractFakeInventory{
     @Getter
     @Setter
     private InventoryTransactionEvent event;
+    @Getter
+    @Setter
+    private boolean autoClose = false;
+    @Getter
+    @Setter
+    private Player player;
+    @Getter
+    @Setter
+    private boolean async = false;
     private String name;
 
     public ChestFakeInventory(InventoryType type, InventoryHolder holder, String title) {

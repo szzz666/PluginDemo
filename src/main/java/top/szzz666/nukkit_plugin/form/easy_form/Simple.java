@@ -18,9 +18,14 @@ public class Simple {
     private final FormWindowSimple form;
     private final List<Runnable> buttons = new ArrayList<>();
     private Runnable close;
+    private boolean async;
 
     public Simple(String title, String content) {
         this.form = new FormWindowSimple(title, content);
+    }
+    public Simple(String title, String content,boolean async) {
+        this.form = new FormWindowSimple(title, content);
+        this.async = async;
     }
 
     public void add(String text) {
@@ -42,6 +47,10 @@ public class Simple {
     }
 
     public void show(Player player) {
+        if (this.async){
+            asyncShow(player);
+            return;
+        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }

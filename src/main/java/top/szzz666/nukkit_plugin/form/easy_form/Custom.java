@@ -19,9 +19,15 @@ public class Custom {
     private FormWindowCustom form;
     private Runnable close;
     private Runnable submit;
+    private boolean async;
 
     public Custom(String title) {
         this.form = new FormWindowCustom(title);
+    }
+
+    public Custom(String title, boolean async) {
+        this.form = new FormWindowCustom(title);
+        this.async = async;
     }
 
     public String add(String Label) {
@@ -41,6 +47,10 @@ public class Custom {
     }
 
     public void show(Player player) {
+        if (this.async) {
+            asyncShow(player);
+            return;
+        }
         this.form.addHandler(FormResponseHandler.withoutPlayer(ignored -> processReturns()));
         player.showFormWindow(this.form);
     }

@@ -36,7 +36,6 @@ public class Main extends PluginBase {
     //插件开启
     @Override
     public void onEnable() {
-        //检查服务器
         checkServer();
         //注册监听器
         nkServer.getPluginManager().registerEvents(new Listeners(), this);
