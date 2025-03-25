@@ -32,7 +32,7 @@ public class DoubleChestFakeInventory extends ChestFakeInventory{
 
     private static byte[] getDoubleNbt(BlockVector3 pos, BlockVector3 pairPos, String name) {
         CompoundTag tag = new CompoundTag()
-                .putString("id", BlockEntity.ENDER_CHEST)
+                .putString("id", BlockEntity.CHEST)
                 .putInt("x", pos.x)
                 .putInt("y", pos.y)
                 .putInt("z", pos.z)
