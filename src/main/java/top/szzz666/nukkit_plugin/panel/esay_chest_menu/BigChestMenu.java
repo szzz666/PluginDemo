@@ -10,10 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import top.szzz666.nukkit_plugin.panel.esay_chest_menu.lib.DoubleChestFakeInventory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BigChestMenu extends DoubleChestFakeInventory {
     private final List<ChestMenu.Button> buttons = new ArrayList<>();
@@ -47,13 +44,16 @@ public class BigChestMenu extends DoubleChestFakeInventory {
     public void show(Player player) {
         this.id = Entity.entityCount++;
         Map<Integer, Item> itemMap = new LinkedHashMap<>();
-        List<Runnable> rs = new ArrayList<>();
+        HashMap<Integer, Runnable> rs = new HashMap<>();
+        List<Integer> slots = new ArrayList<>();
         for (ChestMenu.Button button : buttons) {
             itemMap.put(button.slot, button.item);
-            rs.add(button.callback);
+            rs.put(button.slot, button.callback);
+            slots.add(button.slot);
         }
         this.setContents(itemMap);
         this.setRs(rs);
+        this.setSlots(slots);
         this.setPlayer(player);
         player.addWindow(this);
     }

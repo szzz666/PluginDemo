@@ -18,6 +18,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -27,7 +28,10 @@ import java.util.List;
 public class ChestFakeInventory extends AbstractFakeInventory{
     @Getter
     @Setter
-    private List<Runnable> rs;
+    private HashMap<Integer, Runnable> rs;
+    @Getter
+    @Setter
+    private List<Integer> slots;
     @Getter
     @Setter
     private InventoryTransactionEvent event;

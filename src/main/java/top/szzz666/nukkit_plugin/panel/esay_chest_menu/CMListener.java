@@ -9,6 +9,7 @@ import top.szzz666.nukkit_plugin.panel.esay_chest_menu.lib.ChestFakeInventory;
 
 import static top.szzz666.nukkit_plugin.tools.taskUtil.Async;
 
+
 public class CMListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryTransaction(InventoryTransactionEvent event) {
@@ -19,13 +20,15 @@ public class CMListener implements Listener {
                     ChestFakeInventory inventory = (ChestFakeInventory) slotChange.getInventory();
                     inventory.setEvent(event);
                     int slot = slotChange.getSlot();
-                    if (inventory.isAsync()) {
-                        Async(() -> inventory.getRs().get(slot).run());
-                    } else {
-                        inventory.getRs().get(slot).run();
-                    }
-                    if (inventory.isAutoClose()) {
-                        inventory.close(inventory.getPlayer());
+                    if (inventory.getSlots().contains(slot)) {
+                        if (inventory.isAsync()) {
+                            Async(() -> inventory.getRs().get(slot).run());
+                        } else {
+                            inventory.getRs().get(slot).run();
+                        }
+                        if (inventory.isAutoClose()) {
+                            inventory.close(inventory.getPlayer());
+                        }
                     }
                     event.setCancelled(true);
                 }
