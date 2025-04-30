@@ -1,20 +1,21 @@
 package top.szzz666.nukkit_plugin.config;
 
-import cn.nukkit.plugin.Plugin;
-import cn.nukkit.utils.Config;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EasyConfig {
-    private final Plugin plugin;
-    private final String configFileName;
+    private final String configFilePath;
     private final Map<String, Object> defaults = new HashMap<>();
-    private Config config;
+    private Map<String, Object> config = new HashMap<>();
 
-    public EasyConfig(String configFileName, Plugin plugin) {
-        this.configFileName = configFileName;
-        this.plugin = plugin;
+    public EasyConfig(String configFilePath) {
+        this.configFilePath = configFilePath;
     }
 
     /**
@@ -36,58 +37,120 @@ public class EasyConfig {
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
-        Object value = config.get(key, defaults.get(key));
-        return (T) value;
+        if (!config.containsKey(key)) {
+            return (T) defaults.get(key);
+        }
+        return (T) config.get(key);
     }
 
     public String getString(String key) {
-        return get(key);
+        Object value = get(key);
+        return value != null ? value.toString() : null;
     }
 
     public int getInt(String key) {
-        return get(key);
+        Object value = get(key);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        } else if (value instanceof String) {
+            return Integer.parseInt((String) value);
+        }
+        return ((Number) value).intValue();
     }
 
     public boolean getBoolean(String key) {
-        return get(key);
+        Object value = get(key);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return Boolean.parseBoolean(value.toString());
     }
 
     public double getDouble(String key) {
-        return get(key);
-    }
-
-
-    /**
-     * 设置配置项的值
-     *
-     * @param key   配置项名称
-     * @param value 配置项的值
-     */
-    public void set(String key, Object value) {
-        config.set(key, value);
-    }
-
-    /**
-     * 加载配置文件
-     */
-    public void load() {
-        // 保存默认配置文件
-        plugin.saveResource(configFileName);
-        // 加载配置文件
-        config = new Config(plugin.getDataFolder().getPath() + "/" + configFileName, Config.YAML);
-        // 确保所有默认值都存在
-        for (Map.Entry<String, Object> entry : defaults.entrySet()) {
-            if (!config.exists(entry.getKey())) {
-                config.set(entry.getKey(), entry.getValue());
-            }
+        Object value = get(key);
+        if (value instanceof Double) {
+            return (Double) value;
+        } else if (value instanceof String) {
+            return Double.parseDouble((String) value);
         }
-        config.save();
+        return ((Number) value).doubleValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <K, V> Map<K, V> getMap(String key) {
+        return (Map<K, V>) get(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getList(String key) {
+        return (List<T>) get(key);
+    }
+
+    public void set(String key, Object value) {
+        config.put(key, value);
+    }
+
+    public void load() {
+        Yaml yaml = new Yaml();
+        File configFile = new File(configFilePath);
+
+        try {
+            if (!configFile.exists()) {
+                // 如果文件不存在，创建并写入默认值
+                config.putAll(defaults);
+                save();
+                return;
+            }
+
+            // 加载现有配置
+            try (InputStream inputStream = Files.newInputStream(Paths.get(configFilePath))) {
+                Map<String, Object> loadedConfig = yaml.load(inputStream);
+                if (loadedConfig != null) {
+                    config = loadedConfig;
+                }
+            }
+
+            // 检查是否有新增的默认值
+            boolean modified = false;
+            for (Map.Entry<String, Object> entry : defaults.entrySet()) {
+                if (!config.containsKey(entry.getKey())) {
+                    config.put(entry.getKey(), entry.getValue());
+                    modified = true;
+                }
+            }
+
+            if (modified) {
+                save();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * 保存配置文件
      */
     public void save() {
-        config.save();
+        Yaml yaml = new Yaml();
+        try {
+            // 确保父目录存在
+            File configFile = new File(configFilePath);
+            File parentDir = configFile.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            // 如果文件不存在则创建
+            if (!configFile.exists()) {
+                configFile.createNewFile();
+            }
+
+            // 写入文件
+            try (Writer writer = new FileWriter(configFile)) {
+                yaml.dump(config, writer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

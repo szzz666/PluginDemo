@@ -28,7 +28,6 @@ public class Main extends PluginBase {
         plugin = this;
         consoleObjects = getServer().getConsoleSender();
         ConfigPath = getDataFolder().getPath();
-        ec = new EasyConfig("config.yml", plugin);
         initConfig();
         nkConsole("&b" + plugin.getName() + "插件读取...");
     }
