@@ -45,6 +45,9 @@ public class Simple {
     public int getClickedId(){
         return this.form.getResponse().getClickedButtonId();
     }
+    public String getClickedText(){
+        return this.form.getResponse().getClickedButton().getText();
+    }
 
     public void show(Player player) {
         if (this.async){

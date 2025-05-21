@@ -7,7 +7,7 @@ import static top.szzz666.nukkit_plugin.Main.ec;
 public class MyConfig {
     public static void initConfig() {
         ec = new EasyConfig(ConfigPath + "/config.yml");
-        ec.add("reloadCommand", "pdreload");
+        ec.add("command", "pd");
         ec.load();
     }
 
