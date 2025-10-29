@@ -34,13 +34,24 @@ public class Modal {
         modal.asyncShow(player);
     }
 
+    public static void tipsModal(Player player, String content, Runnable r) {
+        Modal modal = new Modal("提示", content, "返回", "关闭");
+        modal.setTruer(r);
+        modal.asyncShow(player);
+    }
+
     public static void confirmModal(Player player, String content, FormWindow form, Runnable truer) {
         Modal form1 = new Modal("需要确认", content, "确认", "返回");
         form1.setTruer(truer);
         form1.setFalser(() -> player.showFormWindow(form));
         form1.asyncShow(player);
     }
-
+    public static void confirmModal(Player player, String content, Runnable falser, Runnable truer) {
+        Modal form1 = new Modal("需要确认", content, "确认", "返回");
+        form1.setTruer(truer);
+        form1.setFalser(falser);
+        form1.asyncShow(player);
+    }
     public static void confirmModal(Player player, String content, Runnable truer) {
         Modal form1 = new Modal("需要确认", content, "确认", "取消");
         form1.setTruer(truer);

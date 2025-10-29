@@ -1,14 +1,19 @@
 package top.szzz666.nukkit_plugin.tools;
 
+import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import io.leego.banana.BananaUtils;
 import io.leego.banana.Font;
 import lombok.SneakyThrows;
 import top.szzz666.nukkit_plugin.panel.esay_chest_menu.lib.AbstractFakeInventory;
 
+import static top.szzz666.nukkit_plugin.Main.nkServer;
 import static top.szzz666.nukkit_plugin.Main.plugin;
 
 public class pluginUtil {
+    public static void multCmd(CommandSender sender, String command) {
+        nkServer.getCommandMap().dispatch(sender, command);
+    }
     public static void checkServer(){
         boolean ver = false;
         //双核心兼容

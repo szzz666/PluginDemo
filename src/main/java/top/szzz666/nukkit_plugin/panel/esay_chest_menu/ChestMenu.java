@@ -10,7 +10,11 @@ import lombok.Getter;
 import lombok.Setter;
 import top.szzz666.nukkit_plugin.panel.esay_chest_menu.lib.ChestFakeInventory;
 
+
 import java.util.*;
+
+import static top.szzz666.nukkit_plugin.tools.taskUtil.Delayed;
+
 
 public class ChestMenu extends ChestFakeInventory {
     private final List<Button> buttons = new ArrayList<>();
@@ -55,7 +59,8 @@ public class ChestMenu extends ChestFakeInventory {
         this.setRs(rs);
         this.setSlots(slots);
         this.setPlayer(player);
-        player.addWindow(this);
+//        player.removeAllWindows();
+        Delayed(() -> player.addWindow(this), 10, true);
     }
 
     @Override
