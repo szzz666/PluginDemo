@@ -3,6 +3,7 @@ package top.szzz666.nukkit_plugin.config;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -103,8 +104,8 @@ public class EasyConfig {
             }
 
             // 加载现有配置
-            try (InputStream inputStream = Files.newInputStream(Paths.get(configFilePath))) {
-                Map<String, Object> loadedConfig = yaml.load(inputStream);
+            try (InputStream inputStream = new FileInputStream(configFile)) {
+                Map<String, Object> loadedConfig = yaml.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
                 if (loadedConfig != null) {
                     config = loadedConfig;
                 }
@@ -146,7 +147,7 @@ public class EasyConfig {
             }
 
             // 写入文件
-            try (Writer writer = new FileWriter(configFile)) {
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8)) {
                 yaml.dump(config, writer);
             }
         } catch (IOException e) {
